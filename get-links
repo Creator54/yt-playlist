@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+line() {
+	for (( i=1; i<=$(tput cols); i++ ));
+	do
+		printf "$1";
+	done;
+}
+
+clear
+line =
+echo "Hi There !"
+echo "This script helps in removing vids that you dont want to download from a playlist"
+echo "and ofcourse download the rest ;)"
+line =
+
+read -p "Give yt link: " link
+line +
+echo "Checking the link..."
+line +
+youtube-dl -j --flat-playlist "$link" | jq -r '.id' | sed 's_^_https://youtu.be/_' > links.log
+
+if [ $? ] ;then
+
+  echo "All links fetched successfully."
+  line +
+  echo "Links are arranged in sequential order remove the ones that you dont need."
+  read -p "Press Enter to start removing ..."
+  line +
+  vim links.log
+  echo "+Starting the download"
+  line +
+
+  while read vid_link; do
+    youtube-dl -f 248+250 $vid_link
+  done < links.log
+
+  if [ $? ] ; then
+    echo"All videos downloaded successfully."
+  fi
+else
+  echo "Errors encountered !"
+fi
+line =
+
+#Credits 
+#https://superuser.com/questions/1341684/youtube-dl-how-download-only-the-playlist-not-the-files-therein
