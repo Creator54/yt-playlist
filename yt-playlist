@@ -28,7 +28,7 @@ if $cmd &> /dev/null ;then
   echo "Links are arranged in sequential order remove the ones that you dont need."
   read -p "Press Enter to start removing ..."
   line +
-  vim links.log
+  $EDITOR links.log
   echo "+Starting the download"
   line +
 
