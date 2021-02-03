@@ -18,9 +18,10 @@ read -p "Give yt link: " link
 line +
 echo "Checking the link..."
 line +
-youtube-dl -j --flat-playlist "$link" | jq -r '.id' | sed 's_^_https://youtu.be/_' > links.log
+cmd="youtube-dl -j --flat-playlist "$link""
+$cmd | jq -r '.id' | sed 's_^_https://youtu.be/_' > links.log
 
-if [ $? ] ;then
+if $cmd &> /dev/null ;then
 
   echo "All links fetched successfully."
   line +
